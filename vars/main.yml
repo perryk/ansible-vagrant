@@ -1,0 +1,4 @@
+---
+vagrant_os_package:
+  RedHat: rpm
+  Debian: deb

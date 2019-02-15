@@ -3,67 +3,70 @@
   tempfile:
     state: directory
     suffix: vagrant
-  register: tempfile_vagrant
+  register: vagrant_tempdir
 
 - name: Copy HashiCorp's GPG key to host
   copy:
     src: files/hashicorp.asc
-    dest: '{{ tempfile_vagrant.path }}'
+    dest: '{{ vagrant_tempdir.path }}'
 
 - name: Import HashiCorp's GPG key
   command: gpg2 --batch --import hashicorp.asc
   args:
-    chdir: '{{ tempfile_vagrant.path }}'
+    chdir: '{{ vagrant_tempdir.path }}'
   register: gpg_import_result
   changed_when: "'imported: 1' in gpg_import_result.stderr"
 
 - name: Download Vagrant SHA256SUMS
   get_url:
     url: 'https://releases.hashicorp.com/vagrant/{{ vagrant_version }}/vagrant_{{ vagrant_version }}_SHA256SUMS'
-    dest: '{{ tempfile_vagrant.path }}/vagrant_{{ vagrant_version }}_SHA256SUMS'
+    dest: '{{ vagrant_tempdir.path }}/vagrant_{{ vagrant_version }}_SHA256SUMS'
     validate_certs: yes
 
 - name: Download Vagrant SHA256SUMS.sig
   get_url:
     url: 'https://releases.hashicorp.com/vagrant/{{ vagrant_version }}/vagrant_{{ vagrant_version }}_SHA256SUMS.sig'
-    dest: '{{ tempfile_vagrant.path }}/vagrant_{{ vagrant_version }}_SHA256SUMS.sig'
+    dest: '{{ vagrant_tempdir.path }}/vagrant_{{ vagrant_version }}_SHA256SUMS.sig'
     validate_certs: yes
 
 - name: Verify signature on SHA256SUMS
   command: gpg2 --batch --verify vagrant_{{ vagrant_version }}_SHA256SUMS.sig vagrant_{{ vagrant_version }}_SHA256SUMS
   args:
-    chdir: '{{ tempfile_vagrant.path }}'
+    chdir: '{{ vagrant_tempdir.path }}'
   changed_when: no
 
-- name: Download Vagrant dist archive
+- name: Download Vagrant dist package
   get_url:
-    url: 'https://releases.hashicorp.com/vagrant/{{ vagrant_version }}/vagrant_{{ vagrant_version }}_linux_amd64.zip'
-    dest: '{{ tempfile_vagrant.path }}/vagrant_{{ vagrant_version }}_linux_amd64.zip'
+    url: 'https://releases.hashicorp.com/vagrant/{{ vagrant_version }}/vagrant_{{ vagrant_version }}_x86_64.{{ vagranst_os_package[{{ ansible_os_family }}] }}'
+    dest: '{{ vagrant_tempdir.path }}/vagrant_{{ vagrant_version }}_x86_64.{{ vagranst_os_package[{{ ansible_os_family }}] }}'
     validate_certs: yes
 
-- name: Check hashes on downloaded archive
-  shell: grep linux_amd64 < vagrant_{{ vagrant_version }}_SHA256SUMS | sha256sum -c -
+- name: Check hashes on downloaded package
+  shell: grep x86_64.{{ vagranst_os_package[{{ ansible_os_family }}] }} < vagrant_{{ vagrant_version }}_SHA256SUMS | sha256sum -c -
   args:
-    chdir: '{{ tempfile_vagrant.path }}'
+    chdir: '{{ vagrant_tempdir.path }}'
   changed_when: no
 
 - name: Unpack Vagrant dist archive
   unarchive:
     remote_src: yes
-    src: '{{ tempfile_vagrant.path }}/vagrant_{{ vagrant_version }}_linux_amd64.zip'
-    dest: '{{ tempfile_vagrant.path }}/'
+    src: '{{ vagrant_tempdir.path }}/vagrant_{{ vagrant_version }}_linux_amd64.zip'
+    dest: '{{ vagrant_tempdir.path }}/'
 
-- name: Install Vagrant binary
-  copy:
-    remote_src: yes
-    src: '{{ tempfile_vagrant.path }}/vagrant'
-    dest: /usr/local/bin/vagrant
-    mode: 0755
+- name: Install Vagrant rpm
+  yum:
+    name: '{{ vagrant_tempdir.path }}/vagrant_{{ vagrant_version }}_x86_64.{{ vagranst_os_package[{{ ansible_os_family }}] }}'
+  when: ansible_os_family == 'RedHat'
+
+- name: Install Vagrant deb
+  apt:
+    name: '{{ vagrant_tempdir.path }}/vagrant_{{ vagrant_version }}_x86_64.{{ vagranst_os_package[{{ ansible_os_family }}] }}'
+  when: ansible_os_family == 'Debian'
 
 - name: Cleanup installation files
   file:
     state: absent
-    path: '{{ tempfile_vagrant.path }}'
+    path: '{{ vagrant_tempdir.path }}'
 
 - debug:
     msg: 'Successfully installed Vagrant version {{ vagrant_version }}.'

@@ -33,8 +33,3 @@ test-debian-stretch:
   stage: test
   image: debian:stretch
   script: *test
-
-test-alpine-3.9:
-  stage: test
-  image: alpine:3.9
-  script: *test

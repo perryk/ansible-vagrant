@@ -12,19 +12,17 @@ galaxy_info:
   platforms:
     - name: Ubuntu
       versions:
-        - all
+        - bionic
     - name: EL
       versions:
-        - all
+        - 7
     - name: Fedora
       versions:
-        - all
-    - name: Alpine
-      versions:
-        - all
+        - 28
+        - 29
     - name: Debian
       versions:
-        - all
+        - stretch
 
   galaxy_tags:
     - vagrant
@@ -37,7 +35,6 @@ galaxy_info:
     - hashicorp
     - centos
     - fedora
-    - alpine
     - virtual
     - machine
     - devops
