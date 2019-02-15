@@ -13,7 +13,18 @@ The target host must run Linux.
 Role Variables
 --------------
 
-Any version of Vagrant can be installed by changing the `vagrant_version` variable's value to just the SemVer of the version you want to install. Overriding this variable and re-running the role can up/downgrade Vagrant on the target host.
+<table>
+  <tr>
+    <th>Variable</th>
+    <th>Data Type</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>vagrant_version</td>
+    <td>string</td>
+    <td>The desired version of Vagrant. Note that downgrades are not possible unless you manually or otherwise purge the current Vagrant installation beforehand.</td>
+  </tr>
+</table>
 
 Dependencies
 ------------
