@@ -14,10 +14,10 @@ test-fedora-29:
   stage: test
   image: fedora:29
   script: &test
-    - ansible-playbook tests/test.yml -v
-    - ansible-playbook tests/test.yml -v
     - ansible-playbook tests/test.yml -e vagrant_version=2.2.2 -v
     - ansible-playbook tests/test.yml -e vagrant_version=2.2.2 -v
+    - ansible-playbook tests/test.yml -v
+    - ansible-playbook tests/test.yml -v
 
 test-centos-7:
   stage: test
