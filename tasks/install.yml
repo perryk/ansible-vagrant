@@ -47,39 +47,15 @@
     chdir: '{{ vagrant_tempdir.path }}'
   changed_when: no
 
-- name: Vagrant installation block
-  block:
-    - name: Install Vagrant rpm
-      yum: 
-        name: '{{ vagrant_tempdir.path }}/vagrant_{{ vagrant_version }}_x86_64.{{ vagrant_os_package[ansible_os_family] }}'
-      when: ansible_os_family == 'RedHat'
+- name: Install Vagrant rpm
+  yum:
+    name: '{{ vagrant_tempdir.path }}/vagrant_{{ vagrant_version }}_x86_64.{{ vagrant_os_package[ansible_os_family] }}'
+  when: ansible_os_family == 'RedHat'
 
-    - name: Install Vagrant deb
-      apt: 
-        deb: '{{ vagrant_tempdir.path }}/vagrant_{{ vagrant_version }}_x86_64.{{ vagrant_os_package[ansible_os_family] }}'
-      when: ansible_os_family == 'Debian'
-  rescue:
-    - name: Purge Vagrant rpm
-      yum:
-        name: vagrant
-        state: absent
-      when: ansible_os_family == 'RedHat'
-
-    - name: Purge Vagrant deb
-      apt:
-        name: vagrant
-        state: absent
-      when: ansible_os_family == 'Debian'
-
-    - name: Install Vagrant rpm
-      yum: 
-        name: '{{ vagrant_tempdir.path }}/vagrant_{{ vagrant_version }}_x86_64.{{ vagrant_os_package[ansible_os_family] }}'
-      when: ansible_os_family == 'RedHat'
-  
-    - name: Install Vagrant deb
-      apt: 
-        deb: '{{ vagrant_tempdir.path }}/vagrant_{{ vagrant_version }}_x86_64.{{ vagrant_os_package[ansible_os_family] }}'
-      when: ansible_os_family == 'Debian'
+- name: Install Vagrant deb
+  apt:
+    deb: '{{ vagrant_tempdir.path }}/vagrant_{{ vagrant_version }}_x86_64.{{ vagrant_os_package[ansible_os_family] }}'
+  when: ansible_os_family == 'Debian'
 
 - name: Cleanup installation files
   file:
