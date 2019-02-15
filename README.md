@@ -28,7 +28,7 @@ Example Playbook
   roles:
     - role: devoperate.vagrant
       vars:
-        vagrant_version: '0.11.11'
+        vagrant_version: '2.2.3'
 ```
 
 License

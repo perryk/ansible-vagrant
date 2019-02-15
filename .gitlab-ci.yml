@@ -16,8 +16,8 @@ test-fedora-29:
   script: &test
     - ansible-playbook tests/test.yml -v
     - ansible-playbook tests/test.yml -v
-    - ansible-playbook tests/test.yml -e vagrant_version=2.2.3 -v
-    - ansible-playbook tests/test.yml -e vagrant_version=2.2.3 -v
+    - ansible-playbook tests/test.yml -e vagrant_version=2.2.2 -v
+    - ansible-playbook tests/test.yml -e vagrant_version=2.2.2 -v
 
 test-centos-7:
   stage: test
