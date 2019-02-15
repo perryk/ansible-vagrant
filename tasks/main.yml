@@ -1,18 +1,11 @@
 ---
-- name: Check for existing Vagrant installation
-  stat:
-    path: /usr/local/bin/vagrant
-  register: stat_vagrant_result
-
 - name: Check Vagrant version
   command: vagrant --version
   changed_when: no
   failed_when: no
   register: vagrant_version_result
-  when: stat_vagrant_result.stat.exists
 
 - name: Include Vagrant installtion tasks
   become: yes
   include_tasks: install.yml
-  when: not stat_vagrant_result.stat.exists or
-        vagrant_version_result.stdout | regex_search('[0-9]+\\.[0-9]+\\.[0-9]+') != vagrant_version
+  when: vagrant_version_result.stdout | regex_search('[0-9]+\\.[0-9]+\\.[0-9]+') != vagrant_version
