@@ -47,12 +47,6 @@
     chdir: '{{ vagrant_tempdir.path }}'
   changed_when: no
 
-- name: Unpack Vagrant dist archive
-  unarchive:
-    remote_src: yes
-    src: '{{ vagrant_tempdir.path }}/vagrant_{{ vagrant_version }}_linux_amd64.zip'
-    dest: '{{ vagrant_tempdir.path }}/'
-
 - name: Install Vagrant rpm
   yum:
     name: '{{ vagrant_tempdir.path }}/vagrant_{{ vagrant_version }}_x86_64.{{ vagrant_os_package[ansible_os_family] }}'

@@ -42,6 +42,3 @@ galaxy_info:
 dependencies:
   - src: devoperate.gpg
     version: v0.1.2
-
-  - src: devoperate.archive_utils
-    version: v0.1.1
