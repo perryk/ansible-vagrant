@@ -37,7 +37,7 @@
 
 - name: Download Vagrant dist package
   get_url:
-    url: 'https://releases.hashicorp.com/vagrant/{{ vagrant_version }}/vagrant_{{ vagrant_version }}_x86_64.{{ vagranst_os_package[{{ ansible_os_family }}] }}'
+    url: 'https://releases.hashicorp.com/vagrant/{{ vagrant_version }}/vagrant_{{ vagrant_version }}_x86_64.{{ vagrant_os_package[{{ ansible_os_family }}] }}'
     dest: '{{ vagrant_tempdir.path }}/vagrant_{{ vagrant_version }}_x86_64.{{ vagranst_os_package[{{ ansible_os_family }}] }}'
     validate_certs: yes
 
