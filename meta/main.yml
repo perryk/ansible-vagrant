@@ -3,7 +3,7 @@ galaxy_info:
   author: Claude Léveillé
   description: Installs Vagrant securely with GPG and SHA256 verification
 
-  license: license (GPLv3)
+  license: license (MIT)
 
   min_ansible_version: 2.4
 
